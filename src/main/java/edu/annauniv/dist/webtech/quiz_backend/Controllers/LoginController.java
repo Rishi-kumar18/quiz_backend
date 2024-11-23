@@ -20,7 +20,7 @@ public class LoginController {
         return listUser;
     }
 
-    @PostMapping("/")
+    @PostMapping("")
     public Map<String, Object> login(@RequestBody Map<String, String> payload) {
         String email = payload.get("email");
         String password = payload.get("password");

@@ -1,14 +1,14 @@
 package edu.annauniv.dist.webtech.quiz_backend.Views;
 
-import edu.annauniv.dist.webtech.quiz_backend.Models.UserModel;
+import edu.annauniv.dist.webtech.quiz_backend.Models.LoginModel;
 
 import java.sql.*;
 import java.util.*;
 
-public class UserView {
+public class LoginView {
     static private Connection connection;
 
-    public UserView() {
+    public LoginView() {
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection("jdbc:postgresql://localhost:5433/quizapp", "postgres", "Rishi18");
@@ -20,14 +20,14 @@ public class UserView {
         }
     }
 
-    public List<UserModel> listUser() {
-        List<UserModel> userList = new ArrayList<>();
+    public List<LoginModel> listUser() {
+        List<LoginModel> userList = new ArrayList<>();
         try {
             String sql = "SELECT * FROM users";
             PreparedStatement pstmt = connection.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                UserModel tmpUser = new UserModel();
+                LoginModel tmpUser = new LoginModel();
                 tmpUser.setEmail(rs.getString("email"));
                 tmpUser.setRole(rs.getString("role"));
                 userList.add(tmpUser);

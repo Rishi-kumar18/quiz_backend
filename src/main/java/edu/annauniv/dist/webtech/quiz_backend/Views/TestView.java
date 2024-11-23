@@ -61,4 +61,21 @@ public class TestView {
         }
         return testList;
     }
+
+    public int getTestIdByName(String testName) {
+        try {
+            String sql = "SELECT testid FROM test WHERE testname = ?";
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, testName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("testid");
+            } else {
+                throw new RuntimeException("Test not found");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

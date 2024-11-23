@@ -1,6 +1,6 @@
 package edu.annauniv.dist.webtech.quiz_backend.Models;
 
-public class UserModel {
+public class LoginModel {
     private String email;
     private String role;
 

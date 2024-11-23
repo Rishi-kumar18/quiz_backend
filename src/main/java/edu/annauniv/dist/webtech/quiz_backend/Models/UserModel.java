@@ -1,31 +1,22 @@
 package edu.annauniv.dist.webtech.quiz_backend.Models;
 
 public class UserModel {
-    private String name;
-    private String rollno;
-    private int age;
+    private String email;
+    private String role;
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public int getAge() {
-        return age;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setRollno(String rollno) {
-        this.rollno = rollno;
-    }
-
-    public String getRollno() {
-        return rollno;
+    public String getRole() {
+        return role;
     }
 }

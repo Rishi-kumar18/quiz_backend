@@ -1,12 +1,24 @@
 package edu.annauniv.dist.webtech.quiz_backend.Models;
 
 public class QuestionModel {
+    private int questionId;
     private String questionText;
     private String option1;
     private String option2;
     private String option3;
     private String option4;
     private String correctAnswer;
+    private String userAnswer;
+    private boolean isCorrect;
+
+    // Getters and Setters
+    public int getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(int questionId) {
+        this.questionId = questionId;
+    }
 
     public String getQuestionText() {
         return questionText;
@@ -54,5 +66,21 @@ public class QuestionModel {
 
     public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
+    }
+
+    public String getUserAnswer() {
+        return userAnswer;
+    }
+
+    public void setUserAnswer(String userAnswer) {
+        this.userAnswer = userAnswer;
+    }
+
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(boolean correct) {
+        isCorrect = correct;
     }
 }

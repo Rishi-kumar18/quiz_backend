@@ -54,21 +54,20 @@ public class QuestionView {
         }
     }
 
-    public QuestionResponse fetchQuestions(String testName) {
+    public QuestionResponse fetchQuestions(int testId) {
         List<QuestionModel> questionList = new ArrayList<>();
         int questionCount;
         try {
             TestView testView = new TestView();
-            int testId = testView.getTestIdByName(testName);
 
             questionCount = countQuestionsByTestId(testId);
-
-            String sql = "SELECT questiontext, option1, option2, option3, option4, correctanswer FROM questions WHERE testid = ?";
+            String sql = "SELECT questionid, questiontext, option1, option2, option3, option4, correctanswer FROM questions WHERE testid = ?";
             PreparedStatement pstmt = connection.prepareStatement(sql);
             pstmt.setInt(1, testId);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 QuestionModel question = new QuestionModel();
+                question.setQuestionId(rs.getInt("questionid"));
                 question.setQuestionText(rs.getString("questiontext"));
                 question.setOption1(rs.getString("option1"));
                 question.setOption2(rs.getString("option2"));

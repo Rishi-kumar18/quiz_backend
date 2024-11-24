@@ -28,6 +28,7 @@ public class LoginView {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 LoginModel tmpUser = new LoginModel();
+                tmpUser.setUserId(rs.getInt("id"));
                 tmpUser.setEmail(rs.getString("email"));
                 tmpUser.setRole(rs.getString("role"));
                 userList.add(tmpUser);
@@ -48,6 +49,7 @@ public class LoginView {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 result.put("status", "200");
+                result.put("userId", rs.getInt("id"));
                 result.put("role", rs.getString("role"));
             } else {
                 result.put("status", "not ok");

@@ -22,8 +22,8 @@ public class QuestionController {
         questionView.createQuestions(testName, questions);
     }
 
-    @PostMapping("/fetch")
-    public QuestionResponse getQuestionsByTestName(@RequestParam String testName) {
-        return questionView.fetchQuestions(testName);
+    @GetMapping("/fetch")
+    public QuestionResponse getQuestionsByTestName(@RequestParam int testId) {
+        return questionView.fetchQuestions(testId);
     }
 }

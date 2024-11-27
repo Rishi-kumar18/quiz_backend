@@ -69,27 +69,45 @@ public class MarksView {
         return questionList;
     }
 
-    public int countCorrectAnswers(int userId, int testId) {
-        int correctCount = 0;
+    public int calculateCorrectAnswerPercentage(int userId, int testId) {
+        int totalQuestions = 0;
+        int correctAnswers = 0;
         try {
-            String sql = "SELECT COUNT(*) AS correct_count FROM marks WHERE userid = ? AND testid = ? AND iscorrect = TRUE";
-            PreparedStatement pstmt = connection.prepareStatement(sql);
-            pstmt.setInt(1, userId);
-            pstmt.setInt(2, testId);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                correctCount = rs.getInt("correct_count");
+            // Fetch total number of questions
+            String totalQuestionsSql = "SELECT COUNT(*) AS total_count FROM marks WHERE userid = ? AND testid = ?";
+            PreparedStatement totalQuestionsStmt = connection.prepareStatement(totalQuestionsSql);
+            totalQuestionsStmt.setInt(1, userId);
+            totalQuestionsStmt.setInt(2, testId);
+            ResultSet totalQuestionsRs = totalQuestionsStmt.executeQuery();
+            if (totalQuestionsRs.next()) {
+                totalQuestions = totalQuestionsRs.getInt("total_count");
+            }
+
+            // Fetch number of correctly answered questions
+            String correctAnswersSql = "SELECT COUNT(*) AS correct_count FROM marks WHERE userid = ? AND testid = ? AND iscorrect = TRUE";
+            PreparedStatement correctAnswersStmt = connection.prepareStatement(correctAnswersSql);
+            correctAnswersStmt.setInt(1, userId);
+            correctAnswersStmt.setInt(2, testId);
+            ResultSet correctAnswersRs = correctAnswersStmt.executeQuery();
+            if (correctAnswersRs.next()) {
+                correctAnswers = correctAnswersRs.getInt("correct_count");
+            }
+
+            // Calculate percentage
+            if (totalQuestions > 0) {
+                return (correctAnswers * 100) / totalQuestions;
+            } else {
+                return 0; // Avoid division by zero
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return correctCount;
     }
 
     public List<Object> fetchMarksAndCorrectCount(int userId, int testId) {
         List<Object> result = new ArrayList<>();
         List<QuestionModel> questionList = fetchMarksByUserIdAndTestId(userId, testId);
-        int correctCount = countCorrectAnswers(userId, testId);
+        int correctCount = calculateCorrectAnswerPercentage(userId, testId);
         result.add(questionList);
         result.add(correctCount);
         return result;

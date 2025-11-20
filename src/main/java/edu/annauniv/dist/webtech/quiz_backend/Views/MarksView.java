@@ -6,7 +6,9 @@ import edu.annauniv.dist.webtech.quiz_backend.Models.TestModel;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MarksView {
     static private Connection connection;
@@ -146,5 +148,32 @@ public class MarksView {
             throw new RuntimeException(e);
         }
         return testIdList.stream().mapToInt(i -> i).toArray();
+    }
+
+    public List<Map<String, Object>> fetchStudentMarksPercentageByTestId(int testId) {
+        List<Map<String, Object>> results = new ArrayList<>();
+        String sql =
+                "SELECT m.userid, u.email AS student_name, " +
+                        "       CAST(ROUND(100.0 * SUM(CASE WHEN m.iscorrect THEN 1 ELSE 0 END) / COUNT(*)) AS INT) AS marks_percentage " +
+                        "FROM marks m " +
+                        "JOIN users u ON u.id = m.userid " +
+                        "WHERE m.testid = ? " +
+                        "GROUP BY m.userid, u.email " +
+                        "ORDER BY marks_percentage DESC, u.email ASC";
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            pstmt.setInt(1, testId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Map<String, Object> row = new HashMap<>();
+                    row.put("userId", rs.getInt("userid"));
+                    row.put("studentEmail", rs.getString("student_name"));
+                    row.put("marksPercentage", rs.getInt("marks_percentage"));
+                    results.add(row);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return results;
     }
 }
